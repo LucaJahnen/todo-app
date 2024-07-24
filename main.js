@@ -1,12 +1,21 @@
 import './styles.css'
 import { format } from 'date-fns'
+import add from './images/add-outline.svg'
+
+(function() {
+    const img = new Image()
+    img.src = add
+    img.classList.add("add-icon")
+    document.querySelector(".task-button").insertAdjacentElement("afterbegin", img)
+    // document.querySelector(".project-button").insertAdjacentElement("afterbegin", img)
+})()
 
 const todos = {
     "Fitness": [
         {
             "title": "Do pushups",
             "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "2024-01-08",
+            "duedate": "01.08.2024",
             "priority": "medium",
             "notes": "Push ups are hard but I want to practice."
         }
@@ -15,7 +24,7 @@ const todos = {
         {
             "title": "Buy food",
             "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "2024-28-07",
+            "duedate": "01.08.2024",
             "priority": "high",
             "notes": "Push ups are hard but I want to practice."
         }
@@ -28,13 +37,19 @@ const todo = (title, description, duedate, priority, notes) => {
 
 const form = document.querySelector(".add-todo")
 const projects = document.querySelector("#projects")
+const projectsContent = document.querySelector("#projects-content")
 const showProjects = () => {
     projects.innerHTML = ""
+    projectsContent.innerHTML = ""
     for(const project in todos) {
         const option = document.createElement("option")
         option.value = project
         option.textContent = project
         projects.appendChild(option)
+
+        const button = document.createElement("button")
+        button.textContent = project
+        projectsContent.appendChild(button)
     }
 }
 showProjects()
@@ -42,6 +57,12 @@ showProjects()
 const deleteTodo = (parent, index) => {
     parent.splice(index, 1)
     renderTodos(todos)
+}
+
+const deleteProject = (project) => {
+    delete todos[project]
+    renderTodos(todos)
+    showProjects()
 }
 
 const content = document.querySelector("#content")
@@ -57,6 +78,10 @@ const renderTodos = list => {
         const title = document.createElement("h1")
         title.textContent = project
         content.appendChild(title)
+        const buttonDeleteProject = document.createElement("button")
+        buttonDeleteProject.textContent = "Delete Project"
+        buttonDeleteProject.addEventListener("click", () => deleteProject(project))
+        content.appendChild(buttonDeleteProject)
         
         list[project].map(({ title, description, duedate, priority, notes }, index) => {
             createTodo(title, "h2")
