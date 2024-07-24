@@ -1,10 +1,11 @@
 import './styles.css'
+import { format } from 'date-fns'
 
 const todos = {
     "Fitness": [
         {
             "title": "Do pushups",
-            "description": "A want to do at least 100 push ups to become healthier.",
+            "description": "I want to do at least 100 push ups to become healthier.",
             "duedate": "2024-01-08",
             "priority": "medium",
             "notes": "Push ups are hard but I want to practice."
@@ -13,7 +14,7 @@ const todos = {
     "Groceries": [
         {
             "title": "Buy food",
-            "description": "A want to do at least 100 push ups to become healthier.",
+            "description": "I want to do at least 100 push ups to become healthier.",
             "duedate": "2024-28-07",
             "priority": "high",
             "notes": "Push ups are hard but I want to practice."
@@ -25,15 +26,55 @@ const todo = (title, description, duedate, priority, notes) => {
     return { title, description, duedate, priority, notes }
 }
 
-const form = document.querySelector("form")
+const form = document.querySelector(".add-todo")
 const projects = document.querySelector("#projects")
-
-for(const project in todos) {
-    const option = document.createElement("option")
-    option.value = project
-    option.textContent = project
-    projects.appendChild(option)
+const showProjects = () => {
+    projects.innerHTML = ""
+    for(const project in todos) {
+        const option = document.createElement("option")
+        option.value = project
+        option.textContent = project
+        projects.appendChild(option)
+    }
 }
+showProjects()
+
+const deleteTodo = (parent, index) => {
+    parent.splice(index, 1)
+    renderTodos(todos)
+}
+
+const content = document.querySelector("#content")
+const renderTodos = list => {
+    content.innerHTML = ""
+    const createTodo = (text, element = "p") => {
+        const tag = document.createElement(element)
+        tag.textContent = text
+        content.appendChild(tag)
+    }
+
+    for(const project in list) {
+        const title = document.createElement("h1")
+        title.textContent = project
+        content.appendChild(title)
+        
+        list[project].map(({ title, description, duedate, priority, notes }, index) => {
+            createTodo(title, "h2")
+            createTodo(description)
+            createTodo(duedate)
+            createTodo(priority)
+            createTodo(notes)
+            const buttonDelete = document.createElement("button")
+            buttonDelete.textContent = "Delete"
+            buttonDelete.addEventListener("click", () => deleteTodo(list[project], index))
+            content.appendChild(buttonDelete)
+            const buttonUpdate = document.createElement("button")
+            buttonUpdate.textContent = "Update"
+            content.appendChild(buttonUpdate)
+        })
+    }
+}
+renderTodos(todos)
 
 form.addEventListener("submit", e => {
     e.preventDefault()
@@ -42,7 +83,18 @@ form.addEventListener("submit", e => {
     const duedate = document.querySelector("#duedate").value
     const priority = document.querySelector("#priority").value
     const notes = document.querySelector("#notes").value
-    // const project = document.querySelector("#projects").value
-    const newTodo = todo(name, description, duedate, priority, notes)
+    const project = document.querySelector("#projects").value
+    const newTodo = todo(name, description, format(duedate, "dd.MM.yyyy"), priority, notes)
+    todos[project].push(newTodo)
+    renderTodos(todos)
     console.log(newTodo)
+})
+
+const projectForm = document.querySelector(".add-project")
+projectForm.addEventListener("submit", e => {
+    e.preventDefault()
+    const projectName = document.querySelector("#project-name").value
+    todos[projectName] = []
+    renderTodos(todos)
+    showProjects()
 })
