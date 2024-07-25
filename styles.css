@@ -57,7 +57,7 @@ button {
         padding: 0.3rem 0;
     }
 
-    button:nth-child(1) {
+    .task-button, .project-button {
         display: flex;
         align-items: center;
         gap: 0.4rem;
@@ -73,6 +73,23 @@ button {
     h3 {
         font-weight: 500;
         margin-top: 1rem;
+    }
+
+    .show-inbox {
+        margin-top: 1rem;
+    }
+
+    #projects-content  {
+        .button-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.6rem;
+
+            button:nth-child(2) {
+                width: 20px;
+                height: 20px;
+            }
+        }
     }
 }
 
@@ -91,6 +108,7 @@ form {
     flex-direction: column;
     visibility: hidden;
     z-index: -1;
+    min-width: 30%;
 }
 
 .button-wrapper {
@@ -130,8 +148,6 @@ form {
 }
 
 .add-project {
-    min-width: 30%;
-
     input {
         font-size: 1rem;
         padding: 0.6rem 0.8rem;
@@ -143,5 +159,43 @@ form {
 }
 
 #content {
-    padding: 3rem 10%;
+    padding: 4rem 20%;
+
+    h1 {
+        margin-bottom: 1.4rem;
+    }
+
+    .todo-card {
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        padding: 2rem 1.6rem;
+        border-radius: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1.6rem;
+
+        .column {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            height: 20px;
+            width: 20px;
+        }
+
+        button:nth-child(1) {
+            margin-right: 0.5rem;
+        }
+
+        .wrapper {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .priority-wrapper {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+    }
 }
