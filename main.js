@@ -11,6 +11,7 @@ import add from './images/add-outline.svg'
 })()
 
 const todos = {
+    "Inbox": [],
     "Fitness": [
         {
             "title": "Do pushups",
@@ -65,15 +66,16 @@ const deleteProject = (project) => {
     showProjects()
 }
 
+const createTodo = (text, element = "p") => {
+    const tag = document.createElement(element)
+    tag.textContent = text
+    content.appendChild(tag)
+}
+
 const content = document.querySelector("#content")
 const renderTodos = list => {
     content.innerHTML = ""
-    const createTodo = (text, element = "p") => {
-        const tag = document.createElement(element)
-        tag.textContent = text
-        content.appendChild(tag)
-    }
-
+    
     for(const project in list) {
         const title = document.createElement("h1")
         title.textContent = project
@@ -112,7 +114,8 @@ form.addEventListener("submit", e => {
     const newTodo = todo(name, description, format(duedate, "dd.MM.yyyy"), priority, notes)
     todos[project].push(newTodo)
     renderTodos(todos)
-    console.log(newTodo)
+    form.style.visibility = "hidden"
+    form.style.zIndex = "-1"
 })
 
 const projectForm = document.querySelector(".add-project")
@@ -122,4 +125,44 @@ projectForm.addEventListener("submit", e => {
     todos[projectName] = []
     renderTodos(todos)
     showProjects()
+    projectForm.style.visibility = "hidden"
+    projectForm.style.zIndex = "-1"
+})
+
+const projectsContentButtons = document.querySelectorAll("#projects-content button")
+projectsContentButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        content.innerHTML = `<h1>${button.textContent}</h1>`
+
+        todos[button.textContent].map(({ title, description, duedate, priority, notes }) => {
+            createTodo(title, "h2")
+            createTodo(description)
+            createTodo(duedate)
+            createTodo(priority)
+            createTodo(notes)
+        })
+    })
+})
+
+const taskButton = document.querySelector(".task-button")
+const projectButton = document.querySelector(".project-button")
+taskButton.addEventListener("click", () => {
+    form.style.visibility= "visible"
+    form.style.zIndex = "999"
+})
+projectButton.addEventListener("click", () => {
+    projectForm.style.visibility = "visible"
+    projectForm.style.zIndex = "999"
+})
+
+const cancelAddTodo = form.querySelector(".cancel")
+cancelAddTodo.addEventListener("click", () => {
+    form.style.visibility= "hidden"
+    form.style.zIndex = "-1"
+})
+
+const cancelAddTask = projectForm.querySelector(".cancel")
+cancelAddTask.addEventListener("click", () => {
+    projectForm.style.visibility= "hidden"
+    projectForm.style.zIndex = "-1"
 })

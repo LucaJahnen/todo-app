@@ -25,6 +25,10 @@
     font-style: normal;
 }
 
+:root {
+    --primary: #36C2CE;
+}
+
 body, button {
     font-family: "Poppins", sans-serif;
 }
@@ -75,6 +79,67 @@ button {
 form {
     display: none;
     position: absolute;
+    z-index: 999;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    border-radius: 0.8rem;
+    background-color: white;
+    padding: 2rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    z-index: -1;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+.cancel, .add {
+    padding: 0.6rem 1rem;
+    background-color: var(--primary);
+    border-radius: 0.6rem;
+    width: 100%;
+}
+
+.cancel {
+    background-color: lightgrey;
+}
+
+.add-todo {
+    .input-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+    }
+
+    input, select {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: 0.4rem;
+        border: 1px solid black;
+        width: 100%;
+        margin: 0.4rem 0 1rem 0;
+    }
+}
+
+.add-project {
+    min-width: 30%;
+
+    input {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: 0.4rem;
+        border: 1px solid black;
+        width: 100%;
+        margin: 0.4rem 0 1rem 0;
+    }
 }
 
 #content {
