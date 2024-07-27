@@ -87,6 +87,27 @@ const deleteProject = (project) => {
     showProjects()
 }
 
+export const showForm = (formElement, visible) => {
+    if(visible) {
+        formElement.style.visibility = "visible"
+        formElement.style.zIndex = "999"
+    } else {
+        formElement.style.visibility = "hidden"
+        formElement.style.zIndex = "-1"
+    }
+}
+
+export const resetForm = form => {
+    const textInputs = [...form.querySelectorAll("input[type='text']")]
+    textInputs.map(input => {
+        input.value = ""
+    })
+    // const selectInputs = [form.querySelector("select option"), form.querySelectorAll("select option")[1]]
+    // selectInputs.map(option => {
+    //     console.log(option.value)
+    // })
+}
+
 form.addEventListener("submit", e => {
     e.preventDefault()
     const name = document.querySelector("#title").value
@@ -98,8 +119,7 @@ form.addEventListener("submit", e => {
     const newTodo = todo(name, description, format(duedate, "dd.MM.yyyy"), priority, notes)
     todos[project].push(newTodo)
     render(project)
-    form.style.visibility = "hidden"
-    form.style.zIndex = "-1"
+    showForm(form, false)
 })
 
 const projectForm = document.querySelector(".add-project")
@@ -109,8 +129,7 @@ projectForm.addEventListener("submit", e => {
     todos[projectName] = []
     render(projectName)
     showProjects()
-    projectForm.style.visibility = "hidden"
-    projectForm.style.zIndex = "-1"
+    showForm(projectForm, false)
     showTodos()
 })
 
@@ -134,24 +153,21 @@ showTodos()
 // show form to add todo
 const taskButton = document.querySelector(".task-button")
 taskButton.addEventListener("click", () => {
-    form.style.visibility= "visible"
-    form.style.zIndex = "999"
+    resetForm(form)
+    showForm(form, true)
 })
 
 const projectButton = document.querySelector(".project-button")
 projectButton.addEventListener("click", () => {
-    projectForm.style.visibility = "visible"
-    projectForm.style.zIndex = "999"
+    showForm(projectForm, true)
 })
 
 const cancelAddTodo = form.querySelector(".cancel")
 cancelAddTodo.addEventListener("click", () => {
-    form.style.visibility= "hidden"
-    form.style.zIndex = "-1"
+    showForm(form, false)
 })
 
 const cancelAddTask = projectForm.querySelector(".cancel")
 cancelAddTask.addEventListener("click", () => {
-    projectForm.style.visibility= "hidden"
-    projectForm.style.zIndex = "-1"
+    showForm(projectForm, false)
 })
