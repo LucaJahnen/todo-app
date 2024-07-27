@@ -1,5 +1,8 @@
 import './styles.css'
+import render from './render'
+
 import { format } from 'date-fns'
+
 import add from './images/add-outline.svg'
 import trash from './images/trash-outline.svg'
 import pencil from './images/pencil-outline.svg'
@@ -17,9 +20,9 @@ import pencil from './images/pencil-outline.svg'
     document.querySelector(".project-button").insertAdjacentElement("afterbegin", img2)
 })()
 
-let activeProject = "Inbox"
+export let activeProject = "Inbox"
 
-const todos = {
+export const todos = {
     "Inbox": [],
     "Fitness": [
         {
@@ -78,113 +81,11 @@ const showProjects = () => {
 }
 showProjects()
 
-const renderProject = ({ title, description, priority, duedate, notes }, index) => {
-    const section = document.createElement("section")
-    const column = document.createElement("div")
-    column.classList.add("column")
-    section.classList.add("todo-card")
-    createTodo(title, "h2", column)
-
-    const buttonDiv = document.createElement("div")
-    const buttonDelete = document.createElement("button")
-    const imgTrash = new Image()
-    imgTrash.src = trash
-    buttonDelete.appendChild(imgTrash)
-    buttonDelete.addEventListener("click", () => {
-        deleteTodo(todos[button.textContent], index)
-        renderTodoProject(activeProject)
-    })
-    buttonDiv.appendChild(buttonDelete)
-    const buttonUpdate = document.createElement("button")
-    const imgPencil = new Image()
-    imgPencil.src = pencil
-    buttonUpdate.appendChild(imgPencil)
-    buttonDiv.appendChild(buttonUpdate)
-    column.appendChild(buttonDiv)
-    section.appendChild(column)
-
-    createTodo(description,"p", section)
-    createTodo(notes,"p", section)
-    const wrapper = document.createElement("div")
-    wrapper.classList.add("wrapper")
-    createTodo(duedate, "p", wrapper)
-    const priorityImg = document.createElement("div")
-    priorityImg.style.borderRadius = "50%"
-    priorityImg.style.width = "16px"
-    priorityImg.style.height = "16px"
-
-    const possibilites = {
-        "high": "#D2222D",
-        "medium": "#FFBF00",
-        "low": "#238823"
-    }
-    priorityImg.style.backgroundColor = possibilites[priority]
-    const priorityElement = document.createElement("div")
-    priorityElement.classList.add("priority-wrapper")
-    priorityElement.innerHTML = `<p>${priority}</p>`
-    priorityElement.insertAdjacentElement("afterbegin", priorityImg)
-    wrapper.appendChild(priorityElement)
-    section.appendChild(wrapper)
-
-    content.appendChild(section)
-}
-
-const renderTodoProject = (projectName, index) => {
-    content.innerHTML = ""
-    const heading = document.createElement("h1")
-    heading.textContent = projectName
-    content.appendChild(heading)
-
-    todos[projectName].map(project => {
-        renderProject(project, index)
-    })
-}
-
-const deleteTodo = (parent, index) => {
-    parent.splice(index, 1)
-}
-
 const deleteProject = (project) => {
     delete todos[project]
     render("Inbox")
     showProjects()
 }
-
-const createTodo = (text, element = "p", target = content) => {
-    const tag = document.createElement(element)
-    tag.textContent = text
-    target.appendChild(tag)
-}
-
-const content = document.querySelector("#content")
-/* const renderTodos = list => {
-    content.innerHTML = ""
-    
-    for(const project in list) {
-        const title = document.createElement("h1")
-        title.textContent = project
-        content.appendChild(title)
-        const buttonDeleteProject = document.createElement("button")
-        buttonDeleteProject.textContent = "Delete Project"
-        buttonDeleteProject.addEventListener("click", () => deleteProject(project))
-        content.appendChild(buttonDeleteProject)
-        
-        list[project].map(({ title, description, duedate, priority, notes }, index) => {
-            createTodo(title, "h2")
-            createTodo(description)
-            createTodo(duedate)
-            createTodo(priority)
-            createTodo(notes)
-            const buttonDelete = document.createElement("button")
-            buttonDelete.textContent = "Delete"
-            buttonDelete.addEventListener("click", () => deleteTodo(list[project], index))
-            content.appendChild(buttonDelete)
-            const buttonUpdate = document.createElement("button")
-            buttonUpdate.textContent = "Update"
-            content.appendChild(buttonUpdate)
-        })
-    }
-} */
 
 form.addEventListener("submit", e => {
     e.preventDefault()
@@ -213,60 +114,6 @@ projectForm.addEventListener("submit", e => {
     showTodos()
 })
 
-const render = name => {
-    content.innerHTML = `<h1>${name}</h1>`
-
-    todos[name].map(({ title, description, duedate, priority, notes }, index) => {
-        const section = document.createElement("section")
-        const column = document.createElement("div")
-        column.classList.add("column")
-        section.classList.add("todo-card")
-        createTodo(title, "h2", column)
-
-        const buttonDiv = document.createElement("div")
-        const buttonDelete = document.createElement("button")
-        const imgTrash = new Image()
-        imgTrash.src = trash
-        buttonDelete.appendChild(imgTrash)
-        buttonDelete.addEventListener("click", () => {
-            deleteTodo(todos[button.textContent], index)
-            renderTodoProject(activeProject, index)
-        })
-        buttonDiv.appendChild(buttonDelete)
-        const buttonUpdate = document.createElement("button")
-        const imgPencil = new Image()
-        imgPencil.src = pencil
-        buttonUpdate.appendChild(imgPencil)
-        buttonDiv.appendChild(buttonUpdate)
-        column.appendChild(buttonDiv)
-        section.appendChild(column)
-
-        createTodo(description,"p", section)
-        createTodo(notes,"p", section)
-        const wrapper = document.createElement("div")
-        wrapper.classList.add("wrapper")
-        createTodo(duedate, "p", wrapper)
-        const priorityImg = document.createElement("div")
-        priorityImg.style.borderRadius = "50%"
-        priorityImg.style.width = "16px"
-        priorityImg.style.height = "16px"
-
-        const possibilites = {
-            "high": "#D2222D",
-            "medium": "#FFBF00",
-            "low": "#238823"
-        }
-        priorityImg.style.backgroundColor = possibilites[priority]
-        const priorityElement = document.createElement("div")
-        priorityElement.classList.add("priority-wrapper")
-        priorityElement.innerHTML = `<p>${priority}</p>`
-        priorityElement.insertAdjacentElement("afterbegin", priorityImg)
-        wrapper.appendChild(priorityElement)
-        section.appendChild(wrapper)
-
-        content.appendChild(section)
-    })
-}
 render("Inbox")
 
 // display tasks listed in project when user clicks on sidebar
