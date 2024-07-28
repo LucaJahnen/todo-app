@@ -1,7 +1,7 @@
 import { todos, activeProject } from '../main'
 import updateTodo from './update'
-import trash from '../images/trash-outline.svg'
-import pencil from '../images/pencil-outline.svg'
+import alert from '../images/alert-circle-outline.svg'
+import calendar from '../images/calendar-number-outline.svg'
 
 const content = document.querySelector("#content")
 
@@ -23,51 +23,52 @@ const render = name => {
         const column = document.createElement("div")
         column.classList.add("column")
         section.classList.add("todo-card")
-        createTodo(title, "h2", column)
-
-        const buttonDiv = document.createElement("div")
-        const buttonDelete = document.createElement("button")
-        const imgTrash = new Image()
-        imgTrash.src = trash
-        buttonDelete.appendChild(imgTrash)
-        buttonDelete.addEventListener("click", () => {
-            deleteTodo(todos[name], index)
-            render(activeProject)
-        })
-        buttonDiv.appendChild(buttonDelete)
-        const buttonUpdate = document.createElement("button")
-        const imgPencil = new Image()
-        imgPencil.src = pencil
-        buttonUpdate.appendChild(imgPencil)
-        buttonUpdate.addEventListener("click", () => {
-            updateTodo(index)
-        })
-        buttonDiv.appendChild(buttonUpdate)
-        column.appendChild(buttonDiv)
-        section.appendChild(column)
+        createTodo(title, "h2", section)
 
         createTodo(description,"p", section)
+        const notesElement = document.createElement("h3")
+        notesElement.classList.add("notes-heading")
+        notesElement.textContent = "Notes"
+        section.appendChild(notesElement)
         createTodo(notes,"p", section)
         const wrapper = document.createElement("div")
         wrapper.classList.add("wrapper")
-        createTodo(duedate, "p", wrapper)
-        const priorityImg = document.createElement("div")
-        priorityImg.style.borderRadius = "50%"
-        priorityImg.style.width = "16px"
-        priorityImg.style.height = "16px"
-
-        const possibilites = {
-            "high": "#D2222D",
-            "medium": "#FFBF00",
-            "low": "#238823"
-        }
-        priorityImg.style.backgroundColor = possibilites[priority]
-        const priorityElement = document.createElement("div")
-        priorityElement.classList.add("priority-wrapper")
-        priorityElement.innerHTML = `<p>${priority}</p>`
-        priorityElement.insertAdjacentElement("afterbegin", priorityImg)
-        wrapper.appendChild(priorityElement)
+        const calendarImg = new Image()
+        calendarImg.src = calendar
+        wrapper.appendChild(calendarImg)
+        const duedateElement = document.createElement("p")
+        duedateElement.innerHTML = `Due on <span>${duedate}</span>`
+        wrapper.appendChild(duedateElement)
         section.appendChild(wrapper)
+
+        const priorityWrapper = document.createElement("div")
+        priorityWrapper.classList.add("wrapper")
+        const priorityImg = new Image()
+        priorityImg.src = alert
+        priorityWrapper.appendChild(priorityImg)
+        const priorityElement = document.createElement("p")
+        priorityElement.innerHTML = `Priority: <span>${priority}</span>`
+        priorityWrapper.appendChild(priorityElement)
+        section.appendChild(priorityWrapper)
+
+        const buttonSection = document.createElement("div")
+        buttonSection.classList.add("todo-buttons")
+        const buttonDel = document.createElement("button")
+        buttonDel.innerHTML = "Mark as done"
+        buttonDel.classList.add("button-delete")
+        buttonDel.addEventListener("click", () => {
+            deleteTodo(todos[name], index)
+            render(activeProject)
+        })
+        buttonSection.appendChild(buttonDel)
+        const buttonUpd = document.createElement("button")
+        buttonUpd.textContent = "Update todo"
+        buttonUpd.classList.add("button-update")
+        buttonUpd.addEventListener("click", () => {
+            updateTodo(index)
+        })
+        buttonSection.appendChild(buttonUpd)
+        section.appendChild(buttonSection)
 
         content.appendChild(section)
     })

@@ -19,10 +19,11 @@ const updateTodo = (index) => {
     updateForm.querySelector("#title").value = todoCards[index].querySelector("h2").textContent
     updateForm.querySelector("#description").value = todoCards[index].querySelectorAll("p")[0].textContent
     updateForm.querySelector("#notes").value = todoCards[index].querySelectorAll("p")[1].textContent
-    updateForm.querySelector("#duedate").value = todoCards[index].querySelectorAll("p")[2].textContent
+    updateForm.querySelector("#duedate").value = todoCards[index].querySelectorAll("p")[2].querySelector("span").textContent
+    
     const priorityOptions = [...updateForm.querySelectorAll("#priority option")]
     priorityOptions.map(option => {
-        if(option.value === todoCards[index].querySelectorAll("p")[3].textContent) {
+        if(option.value === todoCards[index].querySelectorAll("p")[3].querySelector("span").textContent) {
             option.selected = true
         }
     })

@@ -22,7 +22,15 @@ import trash from './images/trash-outline.svg'
 export let activeProject = "Inbox"
 
 export const todos = {
-    "Inbox": [],
+    "Inbox": [
+        {
+            "title": "Clean the kitchen",
+            "description": "Pick up the dishes and clean the sink.",
+            "duedate": "2024-01-20",
+            "priority": "high",
+            "notes": "Make sure to take out the trash too."
+        }
+    ],
     "Fitness": [
         {
             "title": "Do pushups",
