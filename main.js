@@ -1,11 +1,10 @@
 import './styles.css'
-import render from './render'
+import render from './modules/render'
 
-import { format } from 'date-fns'
+// import { format } from 'date-fns'
 
 import add from './images/add-outline.svg'
 import trash from './images/trash-outline.svg'
-import pencil from './images/pencil-outline.svg'
 
 // display plus icon next to add task and add project button
 (function() {
@@ -28,7 +27,7 @@ export const todos = {
         {
             "title": "Do pushups",
             "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "01.08.2024",
+            "duedate": "2024-08-01",
             "priority": "medium",
             "notes": "Push ups are hard but I want to practice."
         }
@@ -37,30 +36,35 @@ export const todos = {
         {
             "title": "Buy food",
             "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "01.08.2024",
+            "duedate": "2024-08-01",
             "priority": "high",
             "notes": "Push ups are hard but I want to practice."
         }
     ]
 }
+render("Inbox")
 
 const todo = (title, description, duedate, priority, notes) => {
     return { title, description, duedate, priority, notes }
 }
 
 // show projects on sidebar
-const form = document.querySelector(".add-todo")
-const projects = document.querySelector("#projects")
+const todoForm = document.querySelector(".add-todo")
+const projects = [...document.querySelectorAll("#projects")]
 const projectsContent = document.querySelector("#projects-content")
 const showProjects = () => {
-    projects.innerHTML = ""
+    projects.map(project => {
+        project.innerHTML = ""
+    })
     projectsContent.innerHTML = ""
 
     for(const project in todos) {
-        const option = document.createElement("option")
-        option.value = project
-        option.textContent = project
-        projects.appendChild(option)
+        projects.map(projectElement => {
+            const option = document.createElement("option")
+            option.value = project
+            option.textContent = project
+            projectElement.appendChild(option)
+        })
 
         if(project != "Inbox") {
             const wrapper = document.createElement("div")
@@ -87,6 +91,19 @@ const deleteProject = (project) => {
     showProjects()
 }
 
+export const handleTodoSubmit = (formElement, e) => {
+    e.preventDefault()
+    const name = formElement.querySelector("#title").value
+    const description = formElement.querySelector("#description").value
+    const duedate = formElement.querySelector("#duedate").value
+    const priority = formElement.querySelector("#priority").value
+    const notes = formElement.querySelector("#notes").value
+    const project = formElement.querySelector("#projects").value
+    const newTodo = todo(name, description, duedate, priority, notes)
+    showForm(formElement, false)
+    return { newTodo, project }
+}
+
 export const showForm = (formElement, visible) => {
     if(visible) {
         formElement.style.visibility = "visible"
@@ -97,30 +114,21 @@ export const showForm = (formElement, visible) => {
     }
 }
 
-export const resetForm = form => {
-    const textInputs = [...form.querySelectorAll("input[type='text']")]
+export const resetForm = formElement => {
+    formElement.querySelector("h1").textContent = "Add a todo"
+    formElement.querySelectorAll("button")[1].textContent = "Add a todo"
+
+    const textInputs = [...formElement.querySelectorAll("input[type='text']")]
     textInputs.map(input => {
         input.value = ""
     })
-    // const selectInputs = [form.querySelector("select option"), form.querySelectorAll("select option")[1]]
-    // selectInputs.map(option => {
-    //     console.log(option.value)
-    // })
+    const dateInput = formElement.querySelector("input[type='date']")
+    dateInput.value = ""
+    const selectInputs = [formElement.querySelector("#priority option"), formElement.querySelector("#projects option")]
+    selectInputs.map(option => {
+        option.selected = true
+    })
 }
-
-form.addEventListener("submit", e => {
-    e.preventDefault()
-    const name = document.querySelector("#title").value
-    const description = document.querySelector("#description").value
-    const duedate = document.querySelector("#duedate").value
-    const priority = document.querySelector("#priority").value
-    const notes = document.querySelector("#notes").value
-    const project = document.querySelector("#projects").value
-    const newTodo = todo(name, description, format(duedate, "dd.MM.yyyy"), priority, notes)
-    todos[project].push(newTodo)
-    render(project)
-    showForm(form, false)
-})
 
 const projectForm = document.querySelector(".add-project")
 projectForm.addEventListener("submit", e => {
@@ -132,8 +140,6 @@ projectForm.addEventListener("submit", e => {
     showForm(projectForm, false)
     showTodos()
 })
-
-render("Inbox")
 
 // display tasks listed in project when user clicks on sidebar
 const showTodos = () => {
@@ -150,21 +156,35 @@ const showTodos = () => {
 }
 showTodos()
 
+const handleAddSubmit = e => {
+    content.innerHTML = ""
+    const { project, newTodo } = handleTodoSubmit(todoForm, e)
+    todos[project].push(newTodo)
+    render(project)
+}
+
 // show form to add todo
 const taskButton = document.querySelector(".task-button")
 taskButton.addEventListener("click", () => {
-    resetForm(form)
-    showForm(form, true)
+    resetForm(todoForm)
+    showForm(todoForm, true)
 })
+todoForm.addEventListener("submit", e => handleAddSubmit(e))
 
 const projectButton = document.querySelector(".project-button")
 projectButton.addEventListener("click", () => {
     showForm(projectForm, true)
 })
 
-const cancelAddTodo = form.querySelector(".cancel")
+const cancelAddTodo = todoForm.querySelector(".cancel")
 cancelAddTodo.addEventListener("click", () => {
-    showForm(form, false)
+    showForm(todoForm, false)
+})
+
+const updateForm = document.querySelector(".update-todo")
+const cancelUpdateTodo = updateForm.querySelector(".cancel")
+cancelUpdateTodo.addEventListener("click", () => {
+    showForm(updateForm, false)
 })
 
 const cancelAddTask = projectForm.querySelector(".cancel")

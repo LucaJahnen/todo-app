@@ -1,10 +1,9 @@
-import { todos, activeProject, showForm } from './main'
-import trash from './images/trash-outline.svg'
-import pencil from './images/pencil-outline.svg'
-import { format } from 'date-fns'
+import { todos, activeProject } from '../main'
+import updateTodo from './update'
+import trash from '../images/trash-outline.svg'
+import pencil from '../images/pencil-outline.svg'
 
 const content = document.querySelector("#content")
-const todoForm = document.querySelector(".add-todo")
 
 const createTodo = (text, element = "p", target = content) => {
     const tag = document.createElement(element)
@@ -14,27 +13,6 @@ const createTodo = (text, element = "p", target = content) => {
 
 const deleteTodo = (parent, index) => {
     parent.splice(index, 1)
-}
-
-const updateTodo = (index) => {
-    const todoCards = document.querySelectorAll(".todo-card")
-    showForm(todoForm, true)
-    todoForm.querySelector("#title").value = todoCards[index].querySelector("h2").textContent
-    todoForm.querySelector("#description").value = todoCards[index].querySelectorAll("p")[0].textContent
-    todoForm.querySelector("#notes").value = todoCards[index].querySelectorAll("p")[1].textContent
-    todoForm.querySelector("#duedate").value = format(todoCards[index].querySelectorAll("p")[2].textContent, "yyyy-MM-dd")
-    const priorityOptions = [...todoForm.querySelectorAll("#priority option")]
-    priorityOptions.map(option => {
-        if(option.value === todoCards[index].querySelectorAll("p")[3].textContent) {
-            option.selected = true
-        }
-    })
-    const projectOptions = [...todoForm.querySelectorAll("#projects option")]
-    projectOptions.map(option => {
-        if(option.value === activeProject) {
-            option.selected = true
-        }
-    })
 }
 
 const render = name => {

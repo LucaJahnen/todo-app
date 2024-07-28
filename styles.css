@@ -65,7 +65,7 @@ button {
 
     .add-icon {
         height: 28px;
-        background-color: white;
+        background-color: var(--primary);
         padding: 0.3rem;
         border-radius: 50%;
     }
@@ -129,7 +129,7 @@ form {
     background-color: lightgrey;
 }
 
-.add-todo {
+.add-todo, .update-todo {
     .input-wrapper {
         width: 100%;
         display: flex;
