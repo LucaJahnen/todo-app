@@ -3,6 +3,7 @@ import './modules/create'
 import render from './modules/render'
 import { showProjects } from './modules/create'
 import add from './images/add-outline.svg'
+import menu from './images/menu-outline.svg'
 
 // display plus icon next to add task and add project button
 (function() {
@@ -15,6 +16,10 @@ import add from './images/add-outline.svg'
     img2.src = add
     img2.classList.add("add-icon")
     document.querySelector(".project-button").insertAdjacentElement("afterbegin", img2)
+
+    const menuImg = new Image()
+    menuImg.src = menu
+    document.querySelector(".navbar button").appendChild(menuImg)
 })()
 
 export let activeProject = "Inbox"
@@ -64,7 +69,7 @@ export const showForm = (formElement, visible) => {
 }
 
 // display tasks listed in project when user clicks on sidebar
-const showTodos = () => {
+export const showTodos = () => {
     const projectsContentButtons = document.querySelectorAll("#projects-content .project-title")
     const showInbox = document.querySelector(".show-inbox")
     const showToday = document.querySelector(".show-today")
@@ -84,7 +89,6 @@ const showTodos = () => {
                     })
                 })
                 todos["Today"] = dueToday
-                console.log(dueToday)
             }
             render(button.textContent)
             dueToday.length = 0

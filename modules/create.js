@@ -1,6 +1,8 @@
-import { showForm, todos } from "../main"
+import { showForm, todos, showTodos } from "../main"
 import render from "./render"
 import trash from '../images/trash-outline.svg'
+import menu from '../images/menu-outline.svg'
+import close from '../images/close-outline.svg'
 
 const todoForm = document.querySelector(".add-todo")
 const projectForm = document.querySelector(".add-project")
@@ -68,10 +70,12 @@ export const showProjects = () => {
 
     for(const project in todos) {
         projects.map(projectElement => {
-            const option = document.createElement("option")
-            option.value = project
-            option.textContent = project
-            projectElement.appendChild(option)
+            if(project !== "Today") {
+                const option = document.createElement("option")
+                option.value = project
+                option.textContent = project
+                projectElement.appendChild(option)
+            }
         })
 
         if(project !== "Today" && project != "Inbox") {
@@ -91,6 +95,7 @@ export const showProjects = () => {
             projectsContent.appendChild(wrapper)
         }
     }
+    setUp()
 }
 
 projectForm.addEventListener("submit", e => {
@@ -132,3 +137,39 @@ const cancelAddTask = projectForm.querySelector(".cancel")
 cancelAddTask.addEventListener("click", () => {
     showForm(projectForm, false)
 })
+
+const navButton = document.querySelector(".navbar button")
+const sidebar = document.querySelector(".sidebar")
+let menuOpen = false
+
+const imgMenu = new Image()
+imgMenu.src = menu
+const imgClose = new Image()
+imgClose.src = close
+navButton.addEventListener("click", () => {
+    navButton.innerHTML = ""
+    if(menuOpen) {
+        sidebar.style.transform = "translateX(0)"
+        navButton.appendChild(imgMenu)
+    } else {
+        sidebar.style.transform = "translateX(-100vw)"
+        navButton.appendChild(imgClose)
+    }
+    menuOpen = !menuOpen
+})
+
+export const setUp = () => {
+    const menuButtons = document.querySelectorAll(".sidebar button")
+    const projectButtons = document.querySelectorAll("#projects-content button")
+    const buttons = [...menuButtons, ...projectButtons]
+    if(window.screen.width < 960) {
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                sidebar.style.transform = "translateX(0)"
+                navButton.innerHTML = ""
+                navButton.appendChild(imgMenu)
+                menuOpen = false
+            })
+        })
+    }
+}
