@@ -11,19 +11,16 @@ const handleUpdateSubmit = (e, index) => {
 }
 
 const updateTodo = (index) => {
-    const todoCards = document.querySelectorAll(".todo-card")
     showForm(updateForm, true)
-    updateForm.querySelector("h1").textContent = "Update a todo"
-    updateForm.querySelectorAll("button")[1].textContent = "Update a todo"
 
-    updateForm.querySelector("#title").value = todoCards[index].querySelector("h2").textContent
-    updateForm.querySelector("#description").value = todoCards[index].querySelectorAll("p")[0].textContent
-    updateForm.querySelector("#notes").value = todoCards[index].querySelectorAll("p")[1].textContent
-    updateForm.querySelector("#duedate").value = todoCards[index].querySelectorAll("p")[2].querySelector("span").textContent
+    updateForm.querySelector("#title").value = todos[activeProject][index].title
+    updateForm.querySelector("#description").value = todos[activeProject][index].description
+    updateForm.querySelector("#notes").value = todos[activeProject][index].notes
+    updateForm.querySelector("#duedate").value = todos[activeProject][index].duedate
     
     const priorityOptions = [...updateForm.querySelectorAll("#priority option")]
     priorityOptions.map(option => {
-        if(option.value === todoCards[index].querySelectorAll("p")[3].querySelector("span").textContent) {
+        if(option.value === todos[activeProject][index].priority) {
             option.selected = true
         }
     })

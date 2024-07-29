@@ -31,11 +31,12 @@ export const todos = {
             "notes": "Make sure to take out the trash too."
         }
     ],
+    "Today": [],
     "Fitness": [
         {
             "title": "Do pushups",
             "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "2024-08-01",
+            "duedate": "2024-07-29",
             "priority": "medium",
             "notes": "Push ups are hard but I want to practice."
         }
@@ -74,7 +75,7 @@ const showProjects = () => {
             projectElement.appendChild(option)
         })
 
-        if(project != "Inbox") {
+        if(project !== "Today" && project != "Inbox") {
             const wrapper = document.createElement("div")
             wrapper.classList.add("button-wrapper")
             const buttonText = document.createElement("button")
@@ -153,12 +154,28 @@ projectForm.addEventListener("submit", e => {
 const showTodos = () => {
     const projectsContentButtons = document.querySelectorAll("#projects-content button")
     const showInbox = document.querySelector(".show-inbox")
-    const buttons = [...projectsContentButtons, showInbox]
+    const showToday = document.querySelector(".show-today")
+    const buttons = [...projectsContentButtons, showInbox, showToday]
 
     buttons.forEach(button => {
         button.addEventListener("click", () => {
             activeProject = button.textContent
+
+            const dueToday = []
+            const today = new Date().toISOString().slice(0, 10)
+            if(button.textContent === "Today") {
+                Object.keys(todos).map(todo => {
+                    todos[todo].map(task => {
+                        if(task.duedate === today) {
+                            dueToday.push(task)
+                        }
+                    })
+                })
+                todos["Today"] = dueToday
+                console.log(dueToday)
+            }
             render(button.textContent)
+            dueToday.length = 0
         })
     })
 }

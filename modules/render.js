@@ -2,6 +2,7 @@ import { todos, activeProject } from '../main'
 import updateTodo from './update'
 import alert from '../images/alert-circle-outline.svg'
 import calendar from '../images/calendar-number-outline.svg'
+import { format } from 'date-fns'
 
 const content = document.querySelector("#content")
 
@@ -37,7 +38,7 @@ const render = name => {
         calendarImg.src = calendar
         wrapper.appendChild(calendarImg)
         const duedateElement = document.createElement("p")
-        duedateElement.innerHTML = `Due on <span>${duedate}</span>`
+        duedateElement.innerHTML = `Due on ${format(duedate, "E, dd MMM yyyy")}`
         wrapper.appendChild(duedateElement)
         section.appendChild(wrapper)
 
@@ -47,7 +48,7 @@ const render = name => {
         priorityImg.src = alert
         priorityWrapper.appendChild(priorityImg)
         const priorityElement = document.createElement("p")
-        priorityElement.innerHTML = `Priority: <span>${priority}</span>`
+        priorityElement.innerHTML = `Priority: ${priority}`
         priorityWrapper.appendChild(priorityElement)
         section.appendChild(priorityWrapper)
 
