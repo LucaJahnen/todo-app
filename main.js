@@ -1,8 +1,5 @@
 import './styles.css'
 import render from './modules/render'
-
-// import { format } from 'date-fns'
-
 import add from './images/add-outline.svg'
 import trash from './images/trash-outline.svg'
 
@@ -80,6 +77,7 @@ const showProjects = () => {
             wrapper.classList.add("button-wrapper")
             const buttonText = document.createElement("button")
             buttonText.textContent = project
+            buttonText.classList.add("project-title")
             wrapper.appendChild(buttonText)
 
             const buttonIcon = document.createElement("button")
@@ -129,13 +127,19 @@ export const resetForm = formElement => {
 
     const textInputs = [...formElement.querySelectorAll("input[type='text']")]
     textInputs.map(input => {
-        input.value = ""
+        if(input) {
+            input.value = ""
+        }
     })
     const dateInput = formElement.querySelector("input[type='date']")
-    dateInput.value = ""
+    if(dateInput) {
+        dateInput.value = ""
+    }
     const selectInputs = [formElement.querySelector("#priority option"), formElement.querySelector("#projects option")]
     selectInputs.map(option => {
-        option.selected = true
+        if(option) {
+            option.selected = true
+        }
     })
 }
 
@@ -152,15 +156,14 @@ projectForm.addEventListener("submit", e => {
 
 // display tasks listed in project when user clicks on sidebar
 const showTodos = () => {
-    const projectsContentButtons = document.querySelectorAll("#projects-content button")
+    const projectsContentButtons = document.querySelectorAll("#projects-content .project-title")
     const showInbox = document.querySelector(".show-inbox")
     const showToday = document.querySelector(".show-today")
     const buttons = [...projectsContentButtons, showInbox, showToday]
 
     buttons.forEach(button => {
         button.addEventListener("click", () => {
-            activeProject = button.textContent
-
+            activeProject = button.textCo
             const dueToday = []
             const today = new Date().toISOString().slice(0, 10)
             if(button.textContent === "Today") {
@@ -198,6 +201,7 @@ todoForm.addEventListener("submit", e => handleAddSubmit(e))
 
 const projectButton = document.querySelector(".project-button")
 projectButton.addEventListener("click", () => {
+    resetForm(projectForm)
     showForm(projectForm, true)
 })
 
