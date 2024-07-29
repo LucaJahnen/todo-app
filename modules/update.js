@@ -1,4 +1,5 @@
-import { showForm, activeProject, handleTodoSubmit, todos } from "../main"
+import { showForm, activeProject, todos } from "../main"
+import { handleTodoSubmit } from './create'
 import render from './render'
 
 const updateForm = document.querySelector(".update-todo")
