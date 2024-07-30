@@ -3,6 +3,7 @@ import updateTodo from './update'
 import alert from '../images/alert-circle-outline.svg'
 import calendar from '../images/calendar-number-outline.svg'
 import { format } from 'date-fns'
+import { getItem, setItem } from './localstorage'
 
 const content = document.querySelector("#content")
 
@@ -26,7 +27,9 @@ const renderTodo = ({ title, duedate }, index) => {
     const button = document.createElement("button")
     button.textContent = "Details"
     button.addEventListener("click", () => {
-        todos[activeProject][index].expanded = true
+        const storageTodos = getItem("todos")
+        storageTodos[activeProject][index].expanded = true
+        setItem("todos", storageTodos)
         render(activeProject)
     })
     section.appendChild(button)
@@ -73,6 +76,7 @@ const renderDetailedTodo = ({ title, description, duedate, priority, notes }, in
     buttonDel.classList.add("button-delete")
     buttonDel.addEventListener("click", () => {
         deleteTodo(todos[activeProject], index)
+        setItem("todos", todos)
         render(activeProject)
     })
     buttonSection.appendChild(buttonDel)
@@ -87,7 +91,9 @@ const renderDetailedTodo = ({ title, description, duedate, priority, notes }, in
     buttonMinimize.textContent = "Show less"
     buttonMinimize.classList.add("button-minimize")
     buttonMinimize.addEventListener("click", () => {
-        todos[activeProject][index].expanded = false
+        const storageTodos = getItem("todos")
+        storageTodos[activeProject][index].expanded = false
+        setItem("todos", storageTodos)
         render(activeProject)
     })
     buttonSection.appendChild(buttonMinimize)
@@ -99,7 +105,7 @@ const renderDetailedTodo = ({ title, description, duedate, priority, notes }, in
 const render = name => {
     content.innerHTML = `<h1>${name}</h1>`
 
-    todos[name].map((todo, index) => {
+    getItem("todos")[name].map((todo, index) => {
         if(todo.expanded) {
             renderDetailedTodo(todo, index)
         } else {

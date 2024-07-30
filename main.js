@@ -26,6 +26,7 @@ import menu from './images/menu-outline.svg'
 export let activeProject = "Inbox"
 
 export const todos = {
+    "Today": [],
     "Inbox": [
         {
             "title": "Clean the kitchen",
@@ -36,7 +37,6 @@ export const todos = {
             "expanded": false
         }
     ],
-    "Today": [],
     "Fitness": [
         {
             "title": "Do pushups",
@@ -58,6 +58,13 @@ export const todos = {
         }
     ]
 }
+
+const checkTodos = () => {
+    if(getItem("todos") === null) {
+        setItem("todos", todos)
+    }
+}
+checkTodos()
 
 render("Inbox")
 showProjects()
@@ -85,14 +92,20 @@ export const showTodos = () => {
             const dueToday = []
             const today = new Date().toISOString().slice(0, 10)
             if(button.textContent === "Today") {
-                Object.keys(todos).map(todo => {
-                    todos[todo].map(task => {
+                Object.keys(getItem("todos")).map(todo => {
+                    getItem("todos")[todo].map(task => {
                         if(task.duedate === today && !dueToday.includes(task)) {
                             dueToday.push(task)
+                            const storageTodos = getItem("todos")
+                            storageTodos["Today"].push(task)
+                            setItem("todos", storageTodos)
+                            console.log(getItem("todos")["Today"])
                         }
                     })
                 })
-                todos["Today"] = dueToday
+                // const storageTodos = getItem("todos")
+                // storageTodos["Today"] = dueToday
+                // setItem("todos", storageTodos)
             }
             render(button.textContent)
         })

@@ -1,6 +1,6 @@
 import { showForm, todos, showTodos } from "../main"
 import render from "./render"
-import { setItem } from "./localstorage"
+import { getItem, setItem } from "./localstorage"
 import trash from '../images/trash-outline.svg'
 import menu from '../images/menu-outline.svg'
 import close from '../images/close-outline.svg'
@@ -31,7 +31,7 @@ const handleAddSubmit = e => {
     content.innerHTML = ""
     const { project, newTodo } = handleTodoSubmit(todoForm, e)
     todos[project].push(newTodo)
-    setItem(todos)
+    setItem("todos", todos)
     render(project)
 }
 
@@ -54,6 +54,7 @@ export const handleTodoSubmit = (formElement, e) => {
 
 const deleteProject = (project) => {
     delete todos[project]
+    setItem("todos", todos)
     render("Inbox")
     showProjects()
     showTodos()
@@ -68,7 +69,7 @@ export const showProjects = () => {
     })
     projectsContent.innerHTML = ""
 
-    for(const project in todos) {
+    for(const project in getItem("todos")) {
         projects.map(projectElement => {
             if(project !== "Today") {
                 const option = document.createElement("option")
@@ -102,6 +103,7 @@ projectForm.addEventListener("submit", e => {
     e.preventDefault()
     const projectName = document.querySelector("#project-name").value
     todos[projectName] = []
+    setItem("todos", todos)
     render(projectName)
     showProjects()
     showForm(projectForm, false)

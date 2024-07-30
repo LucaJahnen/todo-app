@@ -1,27 +1,31 @@
 import { showForm, activeProject, todos } from "../main"
 import { handleTodoSubmit } from './create'
 import render from './render'
+import { setItem, getItem } from "./localstorage"
 
 const updateForm = document.querySelector(".update-todo")
 const handleUpdateSubmit = (e, index) => {
     e.preventDefault()
     content.innerHTML = ""
     const { project, newTodo } = handleTodoSubmit(updateForm, e)
-    todos[project][index] = newTodo
+    const storageTodos = getItem("todos")
+    storageTodos[project][index] = newTodo
+    setItem("todos", storageTodos)
     render(project)
 }
 
 const updateTodo = (index) => {
     showForm(updateForm, true)
 
-    updateForm.querySelector("#title").value = todos[activeProject][index].title
-    updateForm.querySelector("#description").value = todos[activeProject][index].description
-    updateForm.querySelector("#notes").value = todos[activeProject][index].notes
-    updateForm.querySelector("#duedate").value = todos[activeProject][index].duedate
+    const storageTodos = getItem("todos")
+    updateForm.querySelector("#title").value = storageTodos[activeProject][index].title
+    updateForm.querySelector("#description").value = storageTodos[activeProject][index].description
+    updateForm.querySelector("#notes").value = storageTodos[activeProject][index].notes
+    updateForm.querySelector("#duedate").value = storageTodos[activeProject][index].duedate
     
     const priorityOptions = [...updateForm.querySelectorAll("#priority option")]
     priorityOptions.map(option => {
-        if(option.value === todos[activeProject][index].priority) {
+        if(option.value === storageTodos[activeProject][index].priority) {
             option.selected = true
         }
     })
