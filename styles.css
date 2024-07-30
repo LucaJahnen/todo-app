@@ -44,6 +44,7 @@ button {
     border: none;
     font-size: 1rem;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .navbar {
@@ -217,13 +218,26 @@ form {
                 width: 100%;
             }
 
-            .button-update {
+            .button-update, .button-minimize {
                 background-color: lightgrey;
                 padding: 0.6rem 1rem;
                 border-radius: 0.6rem;
                 font-weight: 500;
                 width: 100%;
             }
+        }
+    }
+
+    .normal-card {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.6rem;
+
+        button {
+            padding: 0.6rem 1rem;
+            background-color: var(--primary);
+            border-radius: 0.6rem;
+            height: fit-content;
         }
     }
 }
@@ -296,6 +310,14 @@ form {
 
         .todo-buttons {
             flex-direction: column;
+        }
+
+        .normal-card {
+            flex-direction: column;
+            
+            button {
+                margin-top: 0.6rem;
+            }
         }
     }
 }

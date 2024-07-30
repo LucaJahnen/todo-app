@@ -1,5 +1,6 @@
 import './styles.css'
 import './modules/create'
+import { setItem, getItem } from './modules/localstorage'
 import render from './modules/render'
 import { showProjects } from './modules/create'
 import add from './images/add-outline.svg'
@@ -31,7 +32,8 @@ export const todos = {
             "description": "Pick up the dishes and clean the sink.",
             "duedate": "2024-01-20",
             "priority": "high",
-            "notes": "Make sure to take out the trash too."
+            "notes": "Make sure to take out the trash too.",
+            "expanded": false
         }
     ],
     "Today": [],
@@ -39,9 +41,10 @@ export const todos = {
         {
             "title": "Do pushups",
             "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "2024-07-29",
+            "duedate": "2024-07-30",
             "priority": "medium",
-            "notes": "Push ups are hard but I want to practice."
+            "notes": "Push ups are hard but I want to practice.",
+            "expanded": false
         }
     ],
     "Groceries": [
@@ -50,7 +53,8 @@ export const todos = {
             "description": "I want to do at least 100 push ups to become healthier.",
             "duedate": "2024-08-01",
             "priority": "high",
-            "notes": "Push ups are hard but I want to practice."
+            "notes": "Push ups are hard but I want to practice.",
+            "expanded": false
         }
     ]
 }
@@ -83,7 +87,7 @@ export const showTodos = () => {
             if(button.textContent === "Today") {
                 Object.keys(todos).map(todo => {
                     todos[todo].map(task => {
-                        if(task.duedate === today) {
+                        if(task.duedate === today && !dueToday.includes(task)) {
                             dueToday.push(task)
                         }
                     })
@@ -91,7 +95,6 @@ export const showTodos = () => {
                 todos["Today"] = dueToday
             }
             render(button.textContent)
-            dueToday.length = 0
         })
     })
 }

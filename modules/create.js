@@ -1,5 +1,6 @@
 import { showForm, todos, showTodos } from "../main"
 import render from "./render"
+import { setItem } from "./localstorage"
 import trash from '../images/trash-outline.svg'
 import menu from '../images/menu-outline.svg'
 import close from '../images/close-outline.svg'
@@ -8,9 +9,6 @@ const todoForm = document.querySelector(".add-todo")
 const projectForm = document.querySelector(".add-project")
 
 const resetForm = formElement => {
-    formElement.querySelector("h1").textContent = "Add a todo"
-    formElement.querySelectorAll("button")[1].textContent = "Add a todo"
-
     const textInputs = [...formElement.querySelectorAll("input[type='text']")]
     textInputs.map(input => {
         if(input) {
@@ -33,11 +31,12 @@ const handleAddSubmit = e => {
     content.innerHTML = ""
     const { project, newTodo } = handleTodoSubmit(todoForm, e)
     todos[project].push(newTodo)
+    setItem(todos)
     render(project)
 }
 
-const todo = (title, description, duedate, priority, notes) => {
-    return { title, description, duedate, priority, notes }
+const todo = (title, description, duedate, priority, notes, expanded) => {
+    return { title, description, duedate, priority, notes, expanded }
 }
 
 export const handleTodoSubmit = (formElement, e) => {
@@ -48,7 +47,7 @@ export const handleTodoSubmit = (formElement, e) => {
     const priority = formElement.querySelector("#priority").value
     const notes = formElement.querySelector("#notes").value
     const project = formElement.querySelector("#projects").value
-    const newTodo = todo(name, description, duedate, priority, notes)
+    const newTodo = todo(name, description, duedate, priority, notes, false)
     showForm(formElement, false)
     return { newTodo, project }
 }
@@ -57,6 +56,7 @@ const deleteProject = (project) => {
     delete todos[project]
     render("Inbox")
     showProjects()
+    showTodos()
 }
 
 // show projects on sidebar
@@ -138,6 +138,7 @@ cancelAddTask.addEventListener("click", () => {
     showForm(projectForm, false)
 })
 
+// set up navigation logic with icons
 const navButton = document.querySelector(".navbar button")
 const sidebar = document.querySelector(".sidebar")
 let menuOpen = false
