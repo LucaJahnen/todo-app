@@ -1,9 +1,79 @@
-import { showForm, todos, showTodos } from "../main"
 import render from "./render"
 import { getItem, setItem } from "./localstorage"
+import { deleteProject } from "./delete"
 import trash from '../images/trash-outline.svg'
-import menu from '../images/menu-outline.svg'
 import close from '../images/close-outline.svg'
+import add from '../images/add-outline.svg'
+import menu from '../images/menu-outline.svg'
+
+// display plus icon next to add task and add project button
+(function() {
+    const images = [
+        {
+            element:  document.querySelector(".task-button"),
+            src: add,
+            className: "add-icon"
+        },
+        {
+            element:  document.querySelector(".project-button"),
+            src: add,
+            className: "add-icon"
+        },
+        {
+            element:  document.querySelector(".navbar button"),
+            src: menu
+        }
+    ]
+
+    images.map(({element, src, className}) => {
+        const img = new Image()
+        img.src = src
+        className && img.classList.add(className)
+        element.insertAdjacentElement("afterbegin", img)
+    })
+})()
+
+export let activeProject = "Inbox"
+
+export const showForm = (formElement, visible) => {
+    if(visible) {
+        formElement.style.visibility = "visible"
+        formElement.style.zIndex = "999"
+    } else {
+        formElement.style.visibility = "hidden"
+        formElement.style.zIndex = "-1"
+    }
+}
+
+// display tasks listed in project when user clicks on sidebar
+export const showTodos = () => {
+    const projectsContentButtons = document.querySelectorAll("#projects-content .project-title")
+    const showInbox = document.querySelector(".show-inbox")
+    const showToday = document.querySelector(".show-today")
+    const buttons = [...projectsContentButtons, showInbox, showToday]
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            activeProject = button.textContent
+                   
+            if(button.textContent === "Today") {
+                const today = new Date().toISOString().slice(0, 10)
+
+                Object.keys(getItem("todos")).map(todo => {
+                    getItem("todos")[todo].map(task => {
+                        const storageTodos = getItem("todos")
+                        storageTodos["Today"].length = 0
+                        if(task.duedate === today) {
+                            storageTodos["Today"].push(task)
+                            setItem("todos", storageTodos)
+                        }
+                    })
+                })
+            }
+            render(button.textContent)
+        })
+    })
+}
 
 const todoForm = document.querySelector(".add-todo")
 const projectForm = document.querySelector(".add-project")
@@ -30,8 +100,9 @@ const resetForm = formElement => {
 const handleAddSubmit = e => {
     content.innerHTML = ""
     const { project, newTodo } = handleTodoSubmit(todoForm, e)
-    todos[project].push(newTodo)
-    setItem("todos", todos)
+    const storageTodos = getItem("todos")
+    storageTodos[project].push(newTodo)
+    setItem("todos", storageTodos)
     render(project)
 }
 
@@ -50,14 +121,6 @@ export const handleTodoSubmit = (formElement, e) => {
     const newTodo = todo(name, description, duedate, priority, notes, false)
     showForm(formElement, false)
     return { newTodo, project }
-}
-
-const deleteProject = (project) => {
-    delete todos[project]
-    setItem("todos", todos)
-    render("Inbox")
-    showProjects()
-    showTodos()
 }
 
 // show projects on sidebar
@@ -102,8 +165,9 @@ export const showProjects = () => {
 projectForm.addEventListener("submit", e => {
     e.preventDefault()
     const projectName = document.querySelector("#project-name").value
-    todos[projectName] = []
-    setItem("todos", todos)
+    const storageTodos = getItem("todos")
+    storageTodos[projectName] = []
+    setItem("todos", storageTodos)
     render(projectName)
     showProjects()
     showForm(projectForm, false)

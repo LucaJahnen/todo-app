@@ -1,5 +1,4 @@
-import { showForm, activeProject, todos } from "../main"
-import { handleTodoSubmit } from './create'
+import { showForm, handleTodoSubmit, activeProject } from './create'
 import render from './render'
 import { setItem, getItem } from "./localstorage"
 

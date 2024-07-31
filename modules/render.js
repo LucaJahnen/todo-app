@@ -1,36 +1,51 @@
-import { todos, activeProject } from '../main'
+import { activeProject } from './create'
 import updateTodo from './update'
 import alert from '../images/alert-circle-outline.svg'
 import calendar from '../images/calendar-number-outline.svg'
 import { format } from 'date-fns'
 import { getItem, setItem } from './localstorage'
+import { deleteTodo } from './delete'
 
 const content = document.querySelector("#content")
+
+const todos = {
+    "Today": [],
+    "Inbox": [
+        {
+            "title": "Clean the kitchen",
+            "description": "Pick up the dishes and clean the sink.",
+            "duedate": "2024-01-20",
+            "priority": "high",
+            "notes": "Make sure to take out the trash too.",
+            "expanded": false
+        }
+    ],
+    "Fitness": [
+        {
+            "title": "Do pushups",
+            "description": "I want to do at least 100 push ups to become healthier.",
+            "duedate": "2024-07-30",
+            "priority": "medium",
+            "notes": "Push ups are hard but I want to practice.",
+            "expanded": false
+        }
+    ],
+    "Groceries": [
+        {
+            "title": "Buy food",
+            "description": "I want to do at least 100 push ups to become healthier.",
+            "duedate": "2024-08-01",
+            "priority": "high",
+            "notes": "Push ups are hard but I want to practice.",
+            "expanded": false
+        }
+    ]
+}
 
 const createTodo = (text, element = "p", target = content) => {
     const tag = document.createElement(element)
     tag.textContent = text
     target.appendChild(tag)
-}
-
-const deleteTodo = (index, title, duedate) => {
-    const newTodos = getItem("todos")
-    newTodos[activeProject].splice(index, 1)
-    setItem("todos", newTodos)
-
-    if(activeProject === "Today") {
-        const storageTodos = getItem("todos")
-        for(const project in storageTodos) {
-            storageTodos[project].map((todo, index) => {
-                if(todo.title === title && todo.duedate === duedate) {
-                    storageTodos[project].splice(index, 1)
-                    setItem("todos", storageTodos)
-                }
-            })
-        }
-    }
-
-    render(activeProject)
 }
 
 const renderTodo = ({ title, duedate }, index) => {
@@ -119,7 +134,10 @@ const renderDetailedTodo = ({ title, description, duedate, priority, notes }, in
 const render = name => {
     content.innerHTML = `<h1>${name}</h1>`
 
-    getItem("todos")[name].map((todo, index) => {
+    const data = getItem("todos") === null ? todos : getItem("todos")
+    getItem("todos") === null && setItem("todos", todos)
+
+    data[name].map((todo, index) => {
         if(todo?.expanded && todo != null) {
             renderDetailedTodo(todo, index)
         } else if(todo != null) {
