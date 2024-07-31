@@ -42,8 +42,6 @@ const todos = {
     ]
 }
 
-setItem("todos", todos)
-
 const createTodo = (text, element = "p", target = content) => {
     const tag = document.createElement(element)
     tag.textContent = text
