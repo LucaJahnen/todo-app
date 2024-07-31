@@ -20,27 +20,29 @@ const todos = {
             "expanded": false
         }
     ],
-    "Fitness": [
+    "Appointments": [
         {
-            "title": "Do pushups",
-            "description": "I want to do at least 100 push ups to become healthier.",
-            "duedate": "2024-07-30",
-            "priority": "medium",
-            "notes": "Push ups are hard but I want to practice.",
+            "title": "Dentist Appointment",
+            "description": "Routine check-up at the dentist.",
+            "duedate": "2024-010-10",
+            "priority": "High",
+            "notes": "Prepare the insurance documents before the visit.",
             "expanded": false
         }
     ],
     "Groceries": [
         {
-            "title": "Buy food",
-            "description": "I want to do at least 100 push ups to become healthier.",
+            "title": "Grocery Shopping",
+            "description": "Buy groceries for the upcoming week.",
             "duedate": "2024-08-01",
-            "priority": "high",
-            "notes": "Push ups are hard but I want to practice.",
+            "priority": "Medium",
+            "notes": "Check for discounts and offers on the grocery store app.",
             "expanded": false
         }
     ]
 }
+
+setItem("todos", todos)
 
 const createTodo = (text, element = "p", target = content) => {
     const tag = document.createElement(element)
@@ -144,6 +146,10 @@ const render = name => {
             renderTodo(todo, index)
         }
     })
+
+    if(name === "Today" && getItem("todos")["Today"]?.length == 0) {
+        content.innerHTML ="<h1>Today</h1><p>No todos for today.</p>"
+    }
 }
 
 export default render

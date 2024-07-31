@@ -36,6 +36,7 @@ import menu from '../images/menu-outline.svg'
 })()
 
 export let activeProject = "Inbox"
+const content = document.querySelector("#content")
 
 export const showForm = (formElement, visible) => {
     if(visible) {
@@ -65,7 +66,7 @@ export const showTodos = () => {
                     getItem("todos")[todo].map(task => {
                         const storageTodos = getItem("todos")
                         storageTodos["Today"].length = 0
-                        if(task.duedate === today) {
+                        if(task?.duedate === today) {
                             storageTodos["Today"].push(task)
                             setItem("todos", storageTodos)
                         }
