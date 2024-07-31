@@ -28,6 +28,8 @@ import menu from '../images/menu-outline.svg'
     images.map(({element, src, className}) => {
         const img = new Image()
         img.src = src
+        img.alt = ""
+        img.role = "presentation"
         className && img.classList.add(className)
         element.insertAdjacentElement("afterbegin", img)
     })
@@ -152,8 +154,11 @@ export const showProjects = () => {
 
             const buttonIcon = document.createElement("button")
             buttonIcon.addEventListener("click", () => deleteProject(project))
+            buttonIcon.ariaLabel = "delete project"
             const Icon = new Image()
             Icon.src = trash
+            Icon.alt = ""
+            Icon.role = "presentation"
             buttonIcon.appendChild(Icon)
             wrapper.appendChild(buttonIcon)
             projectsContent.appendChild(wrapper)

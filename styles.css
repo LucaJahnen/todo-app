@@ -140,6 +140,15 @@ form {
         display: flex;
         justify-content: space-between;
         gap: 0.6rem;
+        position: relative;
+    
+        .hidden {
+            position: absolute;
+            width: 0;
+            height: 0;
+            visibility: hidden;
+            z-index: -1;
+        }
     }
 
     input, select {
