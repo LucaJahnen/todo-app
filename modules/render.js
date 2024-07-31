@@ -147,8 +147,8 @@ const render = name => {
         }
     })
 
-    if(name === "Today" && getItem("todos")["Today"]?.length == 0) {
-        content.innerHTML ="<h1>Today</h1><p>No todos for today.</p>"
+    if(getItem("todos")[name]?.length == 0) {
+        content.innerHTML =`<h1>${name}</h1><p>No todos in this project.</p>`
     }
 }
 
