@@ -6,6 +6,13 @@ import { setItem, getItem } from "./localstorage"
 const updateForm = document.querySelector(".update-todo")
 const handleUpdateSubmit = (e, index) => {
     e.preventDefault()
+
+    if(updateForm.querySelector("#projects").value != activeProject) {
+        const storageTodos = getItem("todos")
+        delete storageTodos[activeProject][index]
+        setItem("todos", storageTodos)
+    }
+
     content.innerHTML = ""
     const { project, newTodo } = handleTodoSubmit(updateForm, e)
     const storageTodos = getItem("todos")

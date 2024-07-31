@@ -59,13 +59,6 @@ export const todos = {
     ]
 }
 
-const checkTodos = () => {
-    if(getItem("todos") === null) {
-        setItem("todos", todos)
-    }
-}
-checkTodos()
-
 render("Inbox")
 showProjects()
 
@@ -89,23 +82,20 @@ export const showTodos = () => {
     buttons.forEach(button => {
         button.addEventListener("click", () => {
             activeProject = button.textContent
-            const dueToday = []
-            const today = new Date().toISOString().slice(0, 10)
+                   
             if(button.textContent === "Today") {
+                const today = new Date().toISOString().slice(0, 10)
+
                 Object.keys(getItem("todos")).map(todo => {
                     getItem("todos")[todo].map(task => {
-                        if(task.duedate === today && !dueToday.includes(task)) {
-                            dueToday.push(task)
-                            const storageTodos = getItem("todos")
+                        const storageTodos = getItem("todos")
+                        storageTodos["Today"].length = 0
+                        if(task.duedate === today) {
                             storageTodos["Today"].push(task)
                             setItem("todos", storageTodos)
-                            console.log(getItem("todos")["Today"])
                         }
                     })
                 })
-                // const storageTodos = getItem("todos")
-                // storageTodos["Today"] = dueToday
-                // setItem("todos", storageTodos)
             }
             render(button.textContent)
         })

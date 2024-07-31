@@ -13,8 +13,24 @@ const createTodo = (text, element = "p", target = content) => {
     target.appendChild(tag)
 }
 
-const deleteTodo = (parent, index) => {
-    parent.splice(index, 1)
+const deleteTodo = (index, title, duedate) => {
+    const newTodos = getItem("todos")
+    newTodos[activeProject].splice(index, 1)
+    setItem("todos", newTodos)
+
+    if(activeProject === "Today") {
+        const storageTodos = getItem("todos")
+        for(const project in storageTodos) {
+            storageTodos[project].map((todo, index) => {
+                if(todo.title === title && todo.duedate === duedate) {
+                    storageTodos[project].splice(index, 1)
+                    setItem("todos", storageTodos)
+                }
+            })
+        }
+    }
+
+    render(activeProject)
 }
 
 const renderTodo = ({ title, duedate }, index) => {
@@ -75,9 +91,7 @@ const renderDetailedTodo = ({ title, description, duedate, priority, notes }, in
     buttonDel.innerHTML = "Mark as done"
     buttonDel.classList.add("button-delete")
     buttonDel.addEventListener("click", () => {
-        deleteTodo(todos[activeProject], index)
-        setItem("todos", todos)
-        render(activeProject)
+        deleteTodo(index, title, duedate)
     })
     buttonSection.appendChild(buttonDel)
     const buttonUpd = document.createElement("button")
@@ -106,9 +120,9 @@ const render = name => {
     content.innerHTML = `<h1>${name}</h1>`
 
     getItem("todos")[name].map((todo, index) => {
-        if(todo.expanded) {
+        if(todo?.expanded && todo != null) {
             renderDetailedTodo(todo, index)
-        } else {
+        } else if(todo != null) {
             renderTodo(todo, index)
         }
     })
