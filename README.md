@@ -1,4 +1,4 @@
-# Restaurant Page Challenge - TheOdinProject
+# Todo List Challenge - TheOdinProject
 This is my solution to the [Todo List Challenge](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) provided by [TheOdinProject](https://TheOdinProject.com).
 
 ## The challenge
@@ -13,7 +13,6 @@ The Challenge was to create a Todo List that lets users create projects and task
 ## My Process
 As mentioned previously, one task was to save the todos to localstorage. I achieved this by creating a dedicated file that only handles data exchange with localstorage. It looks like this:
 
-#### **`localstorage.js`**
 ```js
 export const setItem = (key, item) => {
     localStorage.setItem(key, JSON.stringify(item))
@@ -27,3 +26,6 @@ export const getItem = key => {
 ## Assets
 - [Ionicons](https://ionic.io/ionicons): An icon library developed by the Ionic Framework team
 - [Poppins from Google Fonts](https://fonts.google.com/specimen/Poppins): A sans-serif typeface designed by Indian Type Foundry (ITF)
+
+## Design Inspiration
+I created an account at [Todoist](https://todoist.com/) and used their service to clarify what I wanted to build. Their design looks pretty cool and I enjoyed using their service. Additionally, I used [Galileo AI](https://www.usegalileo.ai/explore) to design the cards for mobile.
